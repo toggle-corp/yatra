@@ -37,6 +37,9 @@ class PlanFilter:
         self.pk_order = plans
         return PlanFilter(self.plans.filter(pk__in=plans))
 
+    def Category(self, category):
+        return PlanFilter(self.plans.filter(category__pk=category.pk))
+
     def get(self):
         if self.pk_order:
             objects = dict([(p.pk, p) for p in self.plans])

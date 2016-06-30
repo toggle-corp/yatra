@@ -47,4 +47,5 @@ def add_test_data():
                 review.rating = 5 if category.pk == user_categories[user] \
                     else random.choice(range(1, 5))
                 review.plan = Plan.objects.get(pk=plan)
-                review.save()
+                if random.randint(1, 8) == 3:
+                    review.save()

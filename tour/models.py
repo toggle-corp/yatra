@@ -31,7 +31,7 @@ class Plan(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.title
+        return str(self.pk) + " " + self.title
 
 
 class Review(models.Model):
@@ -46,4 +46,5 @@ class Review(models.Model):
         unique_together = ('plan', 'posted_by',)
 
     def __str__(self):
-        return self.plan.title + self.review[:30]
+        return self.plan.title + " by " + self.posted_by.username + \
+            " Rating: " + str(self.rating)
