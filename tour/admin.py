@@ -12,3 +12,6 @@ class PlanAdmin(admin.ModelAdmin):
 
 admin.site.register(TripPoint)
 admin.site.register(Plan, PlanAdmin)
+admin.site.register(Category)
+
+admin.site.register(Review)

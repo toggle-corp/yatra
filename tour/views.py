@@ -27,3 +27,9 @@ class DashboardView(View):
     @method_decorator(login_required)
     def get(self, request):
         return render(request, 'tour/dashboard.html')
+
+
+class PlanView(View):
+    @method_decorator(login_required)
+    def get(self, request):
+        return render(request, 'tour/plan.html')
