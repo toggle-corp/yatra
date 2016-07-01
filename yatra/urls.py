@@ -24,4 +24,6 @@ urlpatterns = [
     url(r'^$', HomeView.as_view(), name="home"),
     url(r'^logout/$', LogoutView.as_view(), name="logout"),
     url(r'^dashboard$', DashboardView.as_view(), name="dashboard"),
+    url(r'^search$', SearchView.as_view(), name="search"),
+    url(r'^plan$', PlanView.as_view(), name="plan"),
 ]

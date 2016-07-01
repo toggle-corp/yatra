@@ -8,37 +8,43 @@ def sort_by_recommended(plans, user):
     return sorted(plans, key=lambda p: get_score(p, user), reverse=True)
 
 
-def get_close_plans(plans, destination):
-    pks = []
-    dists = {}
-    for p in plans:
-        dist = get_dest_diff(destination, p.destination)
-        if dist < 5:
-            dists[p.pk] = dist
-            pks.append(p.pk)
-
-    return sorted(pks, key=lambda p: dists[p])
+# def get_close_plans(plans, destination):
+#     pks = []
+#     dists = {}
+#     for p in plans:
+#         dist = get_dest_diff(destination, p.destination)
+#         if dist < 5:
+#             dists[p.pk] = dist
+#             pks.append(p.pk)
+#
+#     return sorted(pks, key=lambda p: dists[p])
 
 
 class PlanFilter:
     def __init__(self, plans=None):
         self.plans = plans if plans else Plan.objects.all()
+        self.pk_order = None
 
-    def budget_between(self, min_cost, max_cost):
-        return PlanFilter(self.plans.filter(budget__lte=max_cost,
-                                            budget__gte=max_cost))
+    def min_budget(self, cost):
+        self.plans = self.plans.filter(budget__gte=cost)
 
-    def days_between(self, min_days, max_days):
-        return PlanFilter(self.plans.filter(number_of_days__lte=max_days,
-                                            number_of_days__gte=min_days))
+    def max_budget(self, cost):
+        self.plans = self.plans.filter(budget__lte=cost)
+
+    def min_days(self, days):
+        self.plans = self.plans.filter(number_of_days__gte=days)
+
+    def max_days(self, days):
+        self.plans = self.plans.filter(number_of_days__lte=days)
 
     def destination(self, destination):
-        plans = get_close_plans(self.plans, destination)
-        self.pk_order = plans
-        return PlanFilter(self.plans.filter(pk__in=plans))
+        # plans = get_close_plans(self.plans, destination)
+        # self.pk_order = plans
+        # return PlanFilter(self.plans.filter(pk__in=plans))
+        self.plans = self.plans.filter(destination=destination)
 
-    def Category(self, category):
-        return PlanFilter(self.plans.filter(category__pk=category.pk))
+    def category(self, category):
+        self.plans = self.plans.filter(category=category)
 
     def get(self):
         if self.pk_order:

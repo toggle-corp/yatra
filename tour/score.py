@@ -100,5 +100,6 @@ def get_score(plan, user):
     w2, s2 = 0.5, get_content_based_rating(plan, user)
     w3, s3 = 0.6, get_collaborative_item_rating(plan, user)
     w4, s4 = 0.7, get_collaborative_user_rating(plan, user)
+    w5, s5 = 0.5, Review.get_average_rating(plan)
 
-    return w1*s1 + w2*s2 + w3*s3 + w4*s4
+    return w1*s1 + w2*s2 + w3*s3 + w4*s4 + w5*s5

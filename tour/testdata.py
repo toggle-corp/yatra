@@ -26,12 +26,16 @@ def add_test_data():
             plan = Plan()
             plan.category = category
             plan.title = "Test plan - " + category.name + " #" + str(i)
-            plan.destination = random.choice(destinations)
+            plan.destination = Destination.get_or_create(
+                random.choice(destinations)
+            )
             plan.number_of_days = random.choice(list(range(5, 30)))
             plan.budget = random.choice(list(range(250, 10250, 250)))
 
             tp = TripPoint()
             tp.day = 1
+            tp.latitude = 0
+            tp.longitude = 0
             tp.save()
             plan.starting_point = tp
             plan.created_by = random.choice(all_users)
