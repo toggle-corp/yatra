@@ -1,6 +1,9 @@
 from django.contrib.auth.models import User
+from django.conf import settings
 
 import random
+import json
+import os
 
 from tour.models import *
 
@@ -55,3 +58,14 @@ def add_test_data():
                 review.plan = Plan.objects.get(pk=plan)
                 if random.randint(1, 8) == 3:
                     review.save()
+
+
+def add_districts():
+    file_path = os.path.join(settings.BASE_DIR,
+                             'static/gis/nepal/admin_level_6.geojson')
+    text = open(file_path, 'r').read()
+    text = text[text.find('=')+1:]
+    data = json.loads(text)
+    for feature in data["features"]:
+        district = feature["properties"]["name:en"]
+        District.get_or_create(district)
