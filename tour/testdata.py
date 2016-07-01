@@ -7,7 +7,8 @@ from tour.models import *
 
 def add_test_data():
 
-    destinations = ["Kathamdnu", "Annapurna", "Everest"]
+    destinations = ["Kathmandu", "Annapurna", "Everest"]
+    districts = ["Kathmandu", "Mustang", "Solukhumbu"]
 
     categories = Category.objects.all()
     user_categories = {}
@@ -26,8 +27,9 @@ def add_test_data():
             plan = Plan()
             plan.category = category
             plan.title = "Test plan - " + category.name + " #" + str(i)
+            dd = random.randint(0, len(destinations)-1)
             plan.destination = Destination.get_or_create(
-                random.choice(destinations)
+                destinations[dd], districts[dd]
             )
             plan.number_of_days = random.choice(list(range(5, 30)))
             plan.budget = random.choice(list(range(250, 10250, 250)))

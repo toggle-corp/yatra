@@ -116,5 +116,21 @@ class SearchView(View):
 
 class PlanView(View):
     @method_decorator(login_required)
+    def get(self, request, pk):
+        plan = Plan.objects.get(pk=pk)
+        return render(request, 'tour/plan.html', {
+            'plan': plan
+        })
+
+
+class VisualizeView(View):
     def get(self, request):
-        return render(request, 'tour/plan.html')
+        destinations = Destination.objects.all()
+        destinations = \
+            sorted(destinations,
+                   key=lambda d: Plan.objects.filter(destination=d).count(),
+                   reverse=True)
+
+        return render(request, 'tour/visualize.html', {
+            'destinations': destinations
+        })

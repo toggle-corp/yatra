@@ -41,7 +41,9 @@ class PlanFilter:
         # plans = get_close_plans(self.plans, destination)
         # self.pk_order = plans
         # return PlanFilter(self.plans.filter(pk__in=plans))
-        self.plans = self.plans.filter(destination=destination)
+        self.plans = self.plans.filter(destination=destination).filter(
+            destination__district=destination.district
+        )
 
     def category(self, category):
         self.plans = self.plans.filter(category=category)

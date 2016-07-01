@@ -16,8 +16,8 @@
     {% csrf_token %}
     <h2>Register</h2>
     {% if register_error %}{{ register_error }}{% endif %}
-    <div><label>First Name:</label><input type="text" name="firstname" required></div>
-    <div><label>Last Name:</label><input type="text" name="lastname" required></div>
+    <div><label>First Name:</label><input type="text" name="firstname"></div>
+    <div><label>Last Name:</label><input type="text" name="lastname"></div>
     <div><label>Email</label><input type="email" name="email"></div>
     <div><label>Username:</label><input type="text" name="username" required></div>
     <div><label>Password:</label><input type="password" name="password" required></div>

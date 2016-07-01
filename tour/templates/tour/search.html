@@ -32,7 +32,7 @@
 <div>
     <h2>Results</h2>
 {% for plan in plans %}
-    <h4> {{plan.title}} </h4>
+    <h4> <a href="{% url 'plan' plan.pk %}">{{plan.title}}</a> </h4>
     <h6> {{plan.category}} </h6>
     Rating: {{plan.rating|floatformat:2}}
     <p> {{plan.description}} </p>

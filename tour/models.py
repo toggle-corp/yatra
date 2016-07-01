@@ -13,6 +13,24 @@ class Category(models.Model):
         return self.name
 
 
+class Agency(models.Model):
+    user = models.OneToOneField(User)
+    title = models.CharField(max_length=100)
+    address = models.TextField(blank=True, default="")
+    phone = models.CharField(max_length=25, null=True, blank=True,
+                             default=None)
+    website = models.CharField(max_length=200, null=True, blank=True,
+                               default=None)
+    score = models.IntegerField(default=5, validators=[MinValueValidator(0),
+                                MaxValueValidator(5)])
+
+    class Meta:
+        verbose_name_plural = "agencies"
+
+    def __str__(self):
+        return self.title
+
+
 class TripPoint(models.Model):
     latitude = models.FloatField()
     longitude = models.FloatField()
@@ -22,10 +40,8 @@ class TripPoint(models.Model):
     description = models.TextField(blank=True, default="")
 
 
-class Destination(models.Model):
+class District(models.Model):
     name = models.CharField(max_length=200, primary_key=True)
-    # parent = models.ForeignKey('Destination', null=True, blank=True,
-    #                            default=None)
 
     def __str__(self):
         return self.name
@@ -33,10 +49,31 @@ class Destination(models.Model):
     @staticmethod
     def get_or_create(name):
         try:
+            return District.objects.get(name=name)
+        except:
+            district = District()
+            district.name = name
+            district.save()
+            return district
+
+
+class Destination(models.Model):
+    name = models.CharField(max_length=200, primary_key=True)
+    district = models.ForeignKey(District)
+    # parent = models.ForeignKey('Destination', null=True, blank=True,
+    #                            default=None)
+
+    def __str__(self):
+        return self.name
+
+    @staticmethod
+    def get_or_create(name, district):
+        try:
             return Destination.objects.get(name=name)
         except:
             dest = Destination()
             dest.name = name
+            dest.district = District.get_or_create(district)
             dest.save()
             return dest
 

@@ -95,8 +95,16 @@ def get_collaborative_user_rating(plan, user):
     return average(scores)
 
 
+def get_agency_score(plan, user):
+    try:
+        agency = Agency.objects.get(user=plan.created_by)
+        return 1, 1 + agency.score/5
+    except:
+        return 0, 0
+
+
 def get_score(plan, user):
-    w1, s1 = 0, 0
+    w1, s1 = get_agency_score(plan, user)
     w2, s2 = 0.5, get_content_based_rating(plan, user)
     w3, s3 = 0.6, get_collaborative_item_rating(plan, user)
     w4, s4 = 0.7, get_collaborative_user_rating(plan, user)

@@ -1,0 +1,46 @@
+{% load staticfiles %}
+
+<head>
+
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+    <style>
+        #the-map { height: 500px; }
+    </style>
+
+    <script src="{% static 'gis/nepal/admin_level_6.geojson' %}"></script>
+</head>
+
+<body>
+    <div id="the-map"></div>
+
+
+    <script>
+        var map = L.map('the-map').setView([27.7, 85.3], 6);
+        var destinations = {
+            {% for dest in destinations %}
+                "{{dest.district}}": {{forloop.counter}},
+            {% endfor %}
+        };
+        L.geoJson(level6, {
+                onEachFeature: onEachFeature
+            }).addTo(map);
+
+
+        function onEachFeature(feature, layer) {
+            if (feature.properties && feature.properties["name:en"]) {
+                var name = feature.properties["name:en"];
+                if (name in destinations) {
+                    layer.setStyle({
+                        color: 'rgb(' + (255-destinations[name]*50) +  ', 0, 0)'
+                    })
+                    return;
+                }
+            }
+            layer.setStyle({
+                color: 'gray'
+            });
+        }
+    </script>
+</body>

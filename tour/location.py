@@ -5,6 +5,36 @@ import urllib.parse
 from tour.models import Destination
 
 
+# def get_lat_long(address):
+#     url = "https://maps.googleapis.com/maps/api/geocode/json?" + \
+#         urllib.parse.urlencode({"address": address})
+#
+#     response = requests.get(url=url)
+#     data = json.loads(response.text)
+#
+#     if len(data["results"]) == 0:
+#         return None
+#
+#     result = data["results"][0]["geometry"]["location"]
+#     return result["lat"], result["lng"]
+
+
+# def get_district(lat, lng):
+#     url = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + \
+#         str(lat) + "," + str(lng)
+#
+#     response = requests.get(url=url)
+#     data = json.loads(response.text)
+#
+#     if len(data["results"]) == 0:
+#         return None
+#
+#     result = data["results"][0]["address_components"]
+#     for r in result:
+#         if "locality" in r["types"]:
+#             return r["short_name"]
+#     return ""
+
 # def create_destination(address):
 #     url = "https://maps.googleapis.com/maps/api/geocode/json?" + \
 #         urllib.parse.urlencode({"address": address})
