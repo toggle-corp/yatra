@@ -19,12 +19,14 @@
     <div class="container">
         <div id="title-wrapper">
             <div class="row">
-                <div class="col-sm-6">
-                    <div id="greeting-msg">Welcome {{ request.user.username }}!</div>
+                <div class="pull-right">
+                    <span id="greeting-msg">Welcome {{ request.user.username }} !</span>
+                    <a href="{% url 'logout' %}" >Logout</a>
                 </div>
-                <div class="col-sm-2 col-sm-offset-4">
-                    <a href="{% url 'logout' %}" class="pull-right">Logout</a>
-                </div>
+                <img id="yatra-logo" src="{% static 'img/green-aaa.png' %}">
+                <div>your travel companion</div>
+                <!-- <h1>Yatra<br><small>your travel companion</small></h1> -->
+
             </div>
         </div>
         <div id="search-wrapper">

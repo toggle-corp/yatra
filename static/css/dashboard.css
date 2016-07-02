@@ -2,6 +2,18 @@ h4 {
     text-transform: uppercase;
     margin-bottom: 24px;
 }
+h1{
+    color: #27ae60;
+}
+
+#yatra-logo{
+    width: 200px;
+}
+#yatra-logo+div{
+    font-size: 1.2em;
+    margin-left: 50px;
+    margin-top: -24px;
+}
 
 #header-section{
     background-color: #f0f0f0;
@@ -14,7 +26,7 @@ h4 {
     padding: 24px 0px;
 }
 #title-wrapper #greeting-msg {
-    font-size: 2em;
+    margin-right: 24px;
 }
 
 #search-wrapper {
