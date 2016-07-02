@@ -77,46 +77,65 @@
                     <input class="btn btn-primary" type="submit" value="search">
                 </div>
             </form>
-
-            <form method="post">
-                {% csrf_token %}
-                <div class="form-group">
-                    <h4>Create New Plan</h4>
-                </div>
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-sm-3">
-                            <input class="form-control" name="title" placeholder="Title" required>
-                        </div>
-                        <div class="col-sm-3">
-                            <input class="form-control" name="destination" placeholder="Destination" required>
-                        </div>
-                        <div class="col-sm-3">
-                            <select id="district-new-plan" name="district" placeholder="District" required>
-                                {% for district in districts %}
-                                <option value="{{district.pk}}">{{district.name}}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <div class="col-sm-3">
-                            <select id="category-new-plan" name="category" placeholder="Category" required>
-                                {% for category in categories %}
-                                <option value="{{category.pk}}">{{category.name}}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <input class="col-sm-offset-9 col-sm-3 btn btn-primary" type="submit" value="create">
-                </div>
-            </form>
         </div>
     </div>
 </div>
 
 <div class="section" id="body-section">
     <div class="container">
+        <div class="row">
+            <div class="col-md-7">
+                <div class="block" id="my-plans-block">
+                    <h4>My Plans</h4>
+                    <div class="row">
+                        {% for plan in my_plans %}
+                        <div class=col-sm-6>
+                            <div class="recommendation">
+                                <div class="title"><a href="{% url 'plan' plan.pk %}">{{plan.title}}</a></div>
+                                <div class="category">{{plan.category}}</div>
+                                <div class="rating">Rating: {{plan.rating|floatformat:2}}</div>
+                                <div class="description"> {{plan.description|safe}} </div>
+                                <div class="budget"> Approx. budget: Rs. {{plan.budget}}</div>
+                                <div class="days">{{plan.number_of_days}} days</div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-5">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <h4>Create New Plan</h4>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" name="title" placeholder="Title" required>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" name="destination" placeholder="Destination" required>
+                    </div>
+                    <div class="form-group">
+                        <select id="district-new-plan" name="district" placeholder="District" required>
+                            {% for district in districts %}
+                            <option value="{{district.pk}}">{{district.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <select id="category-new-plan" name="category" placeholder="Category" required>
+                            {% for category in categories %}
+                            <option value="{{category.pk}}">{{category.name}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input class="btn btn-primary" type="submit" value="create">
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <div class="block" id="recommendations-block">
             <h4>Recommendations</h4>
             <div class="row">
@@ -135,26 +154,10 @@
             </div>
         </div>
 
-        <div class="block" id="my-plans-block">
-            <h4>My Plans</h4>
-            <div class="row">
-                {% for plan in my_plans %}
-                <div class=col-sm-3>
-                    <div class="recommendation">
-                        <div class="title"><a href="{% url 'plan' plan.pk %}">{{plan.title}}</a></div>
-                        <div class="category">{{plan.category}}</div>
-                        <div class="rating">Rating: {{plan.rating|floatformat:2}}</div>
-                        <div class="description"> {{plan.description|safe}} </div>
-                        <div class="budget"> Approx. budget: Rs. {{plan.budget}}</div>
-                        <div class="days">{{plan.number_of_days}} days</div>
-                    </div>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
+
     </div>
 </div>
-
+{% include 'footer.html' %}
 <!-- <div><a href="{% url 'visualize' %}">View Popular Destinations on Map</a></div> -->
 
 

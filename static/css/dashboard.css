@@ -47,3 +47,9 @@ h1{
 .recommendation .title, .search-result .title{
     margin-bottom: 10px;
 }
+
+.description{
+    color: #969696;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
