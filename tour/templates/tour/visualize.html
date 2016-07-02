@@ -44,13 +44,13 @@ function onEachFeature(feature, layer) {
         layer.on('click', function(){
             window.location.href = "{% url 'search' %}?destination=dist%3A"+name;
         })
-        layer.bindPopup(name);
-        layer.on('mouseover', function (e) {
-            this.openPopup();
-        });
-        layer.on('mouseout', function (e) {
-            this.closePopup();
-        });
+        // layer.bindPopup(name);
+        // layer.on('mouseover', function (e) {
+        //     this.openPopup();
+        // });
+        // layer.on('mouseout', function (e) {
+        //     this.closePopup();
+        // });
 
         if (name in destinations) {
             var val = destinations[name];
@@ -109,7 +109,12 @@ function drawChart() {
             </div>
             <div class="col-md-7">
                 <h4>Destinations</h4>
-                <div id="the-map"></div>
+                <div id="map-wrapper">
+                    <div id="the-map"></div>
+                    <div id="legend">
+                        <div id="palette"></div>
+                    </div>
+                </div>
             </div>
         </div>
         <form id="order-form">

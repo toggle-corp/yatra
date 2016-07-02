@@ -43,3 +43,37 @@ h4{
     background-color: #f0f0f0;
     box-shadow: 0 2px 5px 2px rgba(0, 0, 0, 0.1);
 }
+
+#map-wrapper{
+    position: relative;
+}
+#legend{
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 100px;
+    height: 150px;
+    background-color: #fff;
+    box-shadow: 0 1px 3px 1px rgba(0, 0, 0, 0.3);
+}
+#legend::before{
+    content: 'most favourite';
+    font-size: 0.8em;
+    position: absolute;
+    top: 3px;
+    left: 16px;
+}
+#legend::after{
+    content: 'least favourite';
+    font-size: 0.8em;
+    position: absolute;
+    bottom: 3px;
+    left: 16px;
+}
+
+#palette{
+    float: left;
+    width: 12px;
+    height: 100%;
+    background: linear-gradient(hsl(160, 80%, 50%), hsl(140, 80%, 50%), hsl(120, 80%, 50%), hsl(100, 80%, 50%), hsl(80, 80%, 50%), hsl(60, 80%, 50%), hsl(40, 80%, 50%), hsl(20, 80%, 50%), hsl(0, 80%, 50%));
+}
