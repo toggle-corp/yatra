@@ -83,8 +83,9 @@
                 <input type="radio" name="rating" class="rating" value="5" {% if review and review.rating == 5 %} checked {% endif %}/>
             </div>
             Review
-            <textarea id="review">{% if review %}{{review}}{% endif %}</textarea>
+            <textarea id="review">{% if review %}{{review.text}}{% endif %}</textarea>
             <button id="post-review">Post</button>
+
         </div>
     </div>
 
@@ -97,7 +98,7 @@
             );
         });
         $("#post-review").on('click', function() {
-            data = {'review': $("#review").html()};
+            data = {'review': $("#review").val()};
             $.redirectPost(
                 postUrl,
                 data

@@ -97,7 +97,7 @@ class Plan(models.Model):
 
 class Review(models.Model):
     plan = models.ForeignKey(Plan)
-    review = models.TextField(blank=True, default="")
+    text = models.TextField(blank=True, default="")
     rating = models.IntegerField(validators=[MinValueValidator(0),
                                              MaxValueValidator(5)])
     posted_by = models.ForeignKey(User)
@@ -107,7 +107,7 @@ class Review(models.Model):
         unique_together = ('plan', 'posted_by',)
 
     def __str__(self):
-        return self.plan.title
+        return self.text
 
     @staticmethod
     def get_average_rating(plan):

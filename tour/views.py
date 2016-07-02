@@ -159,10 +159,10 @@ class PlanView(View):
         if "review" in request.POST:
             try:
                 review = Review.objects.get(plan=plan, posted_by=request.user)
-                review.review = request.POST["review"]
+                review.text = request.POST["review"]
                 review.save()
             except:
-                review = Review(plan=plan, rating=1, review=request.POST["review"],
+                review = Review(plan=plan, rating=1, text=request.POST["review"],
                                 posted_by=request.user)
                 review.save()
             return redirect('plan', pk)
