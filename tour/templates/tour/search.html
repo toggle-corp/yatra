@@ -50,15 +50,15 @@
                             <select id="category-select" name="category" placeholder="Select a category">
                                 <option value="" selected>Select a category</option>
                                 {% for category in categories %}
-                                <option value="{{category.pk}}">{{category.name}}</option>
+                                <option value="{{category.pk}}" {% if categ and categ == category.pk %}selected{% endif %}>{{category.name}}</option>
                                 {% endfor %}
                             </select>
                         </div>
                         <div class="col-sm-6">
                             <select name="destination" id="destination-select" placeholder="Select a destination">
                                 <option value="" selected>Select a destination</option>
-                                {% for dest in destinations %}
-                                <option value="{{dest.pk}}">{{dest.name}}</option>
+                                {% for destination in destinations %}
+                                <option value="{{destination.pk}}" {% if dest and dest == destination.pk %}selected{% endif %}>{{destination.name}}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -67,16 +67,16 @@
                 <div class="form-group">
                     <div class="row">
                         <div class="col-sm-3">
-                            <input type="number" name="min_cost" class="form-control" placeholder="Min cost (Rs.)">
+                            <input type="number" name="min_cost" class="form-control" placeholder="Min cost (Rs.)" value="{% if min_cost %}{{min_cost}}{% endif %}">
                         </div>
                         <div class="col-sm-3">
-                            <input type="number" name="max_cost" class="form-control" placeholder="Max cost (Rs.)">
+                            <input type="number" name="max_cost" class="form-control" placeholder="Max cost (Rs.)" value="{% if max_cost %}{{max_cost}}{% endif %}">
                         </div>
                         <div class="col-sm-3">
-                            <input type="number" name="min_days" class="form-control" placeholder="Min days">
+                            <input type="number" name="min_days" class="form-control" placeholder="Min days" value="{% if min_days %}{{min_days}}{% endif %}">
                         </div>
                         <div class="col-sm-3">
-                            <input type="number" name="max_days" class="form-control" placeholder="Max days">
+                            <input type="number" name="max_days" class="form-control" placeholder="Max days" value="{% if max_days %}{{max_days}}{% endif %}">
                         </div>
                     </div>
                 </div>

@@ -10,19 +10,47 @@
     </style>
 
     <script src="{% static 'gis/nepal/admin_level_6.geojson' %}"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
 
 <body>
-    <div id="the-map"></div>
+    <div>
+        Destinations:
+        <div id="the-map"></div>
 
+        Categories:
+        <div id="chart_div"></div>
+
+        <form id="order-form">
+            Destination order by:
+            <select name="order" onchange="$('#order-form').submit()">
+                <option value="popular" {% if destination_order == "popular" %} selected {% endif %}>Most popular</option>
+                <option value="rating" {% if destination_order == "rating" %} selected {% endif %}>Highly rated</option>
+            </select>
+            Category order by:
+            <select name="category-order" onchange="$('#order-form').submit()">
+                <option value="popular" {% if category_order == "popular" %} selected {% endif %}>Most popular</option>
+                <option value="rating" {% if category_order == "rating" %} selected {% endif %}>Highly rated</option>
+            </select>
+        </form>
+    </div>
 
     <script>
-        var map = L.map('the-map').setView([27.7, 85.3], 6);
         var destinations = {
             {% for dest in destinations %}
-                "{{dest.district}}": {{forloop.counter}},
+                "{{dest.district}}": {{forloop.counter0}},
             {% endfor %}
         };
+        var max_destinations = {{destinations|length}};
+
+        var categories = {
+            {% for categ in categories %}
+                "{{categ.name}}": {{forloop.counter}},
+            {% endfor %}
+        }
+
+
+        var map = L.map('the-map').setView([27.7, 85.3], 6);
         L.geoJson(level6, {
                 onEachFeature: onEachFeature
             }).addTo(map);
@@ -32,8 +60,11 @@
             if (feature.properties && feature.properties["name:en"]) {
                 var name = feature.properties["name:en"];
                 if (name in destinations) {
+                    var val = destinations[name];
+                    var hue = Math.floor((max_destinations - val - 1)/max_destinations*180);  // go from green to red
+                    console.log(hue);
                     layer.setStyle({
-                        color: 'rgb(' + (255-destinations[name]*50) +  ', 0, 0)'
+                        color: 'hsl(' + hue +  ', 50%, 50%)'
                     })
                     return;
                 }
@@ -41,6 +72,27 @@
             layer.setStyle({
                 color: 'gray'
             });
+        }
+
+
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+            // Create the data table.
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Categories');
+            data.addColumn('number', '');
+            for (categ in categories)
+                data.addRow([categ, categories[categ]]);
+
+            // Set chart options
+            var options = {'title':'',
+                           'width':400,
+                           'height':300};
+
+            // Instantiate and draw our chart, passing in some options.
+            var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
         }
     </script>
 </body>

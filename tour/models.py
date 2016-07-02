@@ -83,10 +83,11 @@ class Plan(models.Model):
     category = models.ForeignKey(Category)
     description = models.TextField(blank=True, default="")
     destination = models.ForeignKey(Destination)
-    starting_point = models.OneToOneField(TripPoint)
+    next_point = models.OneToOneField(TripPoint, null=True, blank=True,
+                                      default=None)
     budget = models.IntegerField(null=True, blank=True, default=None)
     public = models.BooleanField(default=True)
-    number_of_days = models.IntegerField()
+    number_of_days = models.IntegerField(default=0)
 
     created_by = models.ForeignKey(User)
     created_at = models.DateTimeField(auto_now_add=True)

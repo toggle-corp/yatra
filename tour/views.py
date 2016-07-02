@@ -66,7 +66,7 @@ class DashboardView(View):
     def get(self, request):
         user = request.user
         plans = Plan.objects.all().exclude(review__posted_by__pk=user.pk)
-        recommendations = sort_by_recommended(plans, user)[:5]
+        recommendations = sort_by_recommended(plans, user)[:8]
         for plan in recommendations:
             plan.rating = Review.get_average_rating(plan)
         return render(request, 'tour/dashboard.html', {
@@ -74,6 +74,20 @@ class DashboardView(View):
             'destinations': Destination.objects.all(),
             "categories": Category.objects.all(),
         })
+
+    @method_decorator(login_required)
+    def post(self, request):
+        plan = Plan()
+        plan.destination = Destination.objects.get(
+            pk=request.POST["destination"]
+        )
+        plan.category = Category.objects.get(
+            pk=request.POST["category"]
+        )
+        plan.title = request.POST["title"]
+        plan.created_by = request.user
+        plan.save()
+        return reditect('plan', plan.pk)
 
 
 class SearchView(View):
@@ -88,28 +102,37 @@ class SearchView(View):
         min_days = request.GET.get("min_days")
         max_days = request.GET.get("max_days")
 
+        data = {}
+
         if dest != "":
             plan_filter.destination(Destination.objects.get(pk=dest))
+            data["dest"] = dest
         if categ != "":
             plan_filter.category(Category.objects.get(pk=categ))
+            data["categ"] = categ
         if min_days != "":
             plan_filter.min_days(int(min_days))
+            data["min_days"] = min_days
         if max_days != "":
             plan_filter.max_days(int(max_days))
+            data["max_days"] = max_days
         if min_cost != "":
             plan_filter.min_cost(int(min_cost))
+            data["min_cost"] = min_cost
         if max_cost != "":
             plan_filter.max_cost(int(max_cost))
+            data["max_cost"] = max_cost
 
         plans = sort_by_recommended(plan_filter.get(), request.user)
         for plan in plans:
             plan.rating = Review.get_average_rating(plan)
 
-        return render(request, 'tour/search.html', {
+        data.update({
             "destinations": Destination.objects.all(),
             "categories": Category.objects.all(),
             "plans": plans,
         })
+        return render(request, 'tour/search.html', data)
 
 
 def delete_point(point):
@@ -124,11 +147,11 @@ class PlanView(View):
         plan = Plan.objects.get(pk=pk)
         plan.rating = Review.get_average_rating(plan)
 
-        points = [plan.starting_point]
-        point = plan.starting_point
-        while point.next_point:
-            point = point.next_point
+        points = []
+        point = plan.next_point
+        while point:
             points.append(point)
+            point = point.next_point
 
         try:
             review = Review.objects.get(plan=plan, posted_by=request.user)
@@ -139,11 +162,16 @@ class PlanView(View):
             'edit': plan.created_by == request.user,
             'points': points,
             'review': review,
+            'all_reviews': Review.objects.all(),
         })
 
     @method_decorator(login_required)
     def post(self, request, pk):
         plan = Plan.objects.get(pk=pk)
+
+        if "delete" in request.POST:
+            plan.delete()
+            return redirect('dashboard')
 
         if "vote" in request.POST:
             try:
@@ -162,7 +190,8 @@ class PlanView(View):
                 review.text = request.POST["review"]
                 review.save()
             except:
-                review = Review(plan=plan, rating=1, text=request.POST["review"],
+                review = Review(plan=plan, rating=1,
+                                text=request.POST["review"],
                                 posted_by=request.user)
                 review.save()
             return redirect('plan', pk)
@@ -175,22 +204,16 @@ class PlanView(View):
         plan.save()
 
         if "points" in request.POST:
-            to_delete = plan.starting_point.next_point
-
-            points = json.loads(request.POST["points"])
-            if len(points) > 0:
-                plan.starting_point.latitude = points[0][0]
-                plan.starting_point.longitude = points[0][1]
-                plan.starting_point.day = points[0][2]
-                plan.starting_point.description = points[0][3]
-                plan.starting_point.next_point = None
-                plan.starting_point.save()
-            pt = plan.starting_point
-
-            if to_delete:
+            if plan.next_point:
+                to_delete = plan.next_point
+                plan.next_point = None
+                plan.save()
                 delete_point(to_delete)
 
-            for point in points[1:]:
+            points = json.loads(request.POST["points"])
+
+            pt = plan
+            for point in points:
                 tp = TripPoint()
                 tp.latitude = point[0]
                 tp.longitude = point[1]
@@ -200,17 +223,71 @@ class PlanView(View):
                 pt.next_point = tp
                 pt.save()
                 pt = tp
+            plan.number_of_days = max([x[2] for x in points]) \
+                if len(points) > 0 else 0
+            plan.save()
         return redirect('plan', pk)
 
 
 class VisualizeView(View):
     def get(self, request):
-        destinations = Destination.objects.all()
-        destinations = \
-            sorted(destinations,
-                   key=lambda d: Plan.objects.filter(destination=d).count(),
-                   reverse=True)
+        plans = None
+        order = "popular"
+        if "destination-order" in request.GET:
+            order = request.GET["destination-order"]
+
+        if order == "popular":
+            destinations = Destination.objects.all()
+            destinations = \
+                sorted(
+                    destinations,
+                    key=lambda d: Plan.objects.filter(destination=d).count(),
+                    reverse=True
+                )
+        elif order == "rating":
+            plans = Plan.objects.all()
+            plans = \
+                sorted(
+                    plans, key=lambda p: Review.get_average_rating(p),
+                    reverse=True
+                )
+            destinations = []
+            for p in plans:
+                if p.destination not in destinations:
+                    destinations.append(p.destination)
+
+        destination_order = order
+
+        order = "popular"
+        if "category-order" in request.GET:
+            order = request.GET["category-order"]
+
+        if order == "popular":
+            categories = Category.objects.all()
+            categories = \
+                sorted(
+                    categories,
+                    key=lambda c: Plan.objects.filter(category=c).count(),
+                    reverse=True
+                )
+        elif order == "rating":
+            if not plans:
+                plans = Plan.objects.all()
+                plans = \
+                    sorted(
+                        plans, key=lambda p: Review.get_average_rating(p),
+                        reverse=True
+                    )
+            categories = []
+            for p in plans:
+                if p.category not in categories:
+                    categories.append(p.category)
+
+        category_order = order
 
         return render(request, 'tour/visualize.html', {
-            'destinations': destinations
+            'destinations': destinations,
+            'destination_order': destination_order,
+            'categories': categories,
+            'category_order': category_order,
         })
