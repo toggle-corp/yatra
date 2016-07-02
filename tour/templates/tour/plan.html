@@ -13,6 +13,7 @@ var editMode = {% if edit %}true{%else%}false{% endif %};
 var points = [];
 var day = 1;
 var postUrl = "{% url 'plan' plan.pk %}";
+var isPublic = {% if plan.public %}true{%else%}false{% endif %};
 
 function refresh(map) {
     {% for point in points %}
@@ -46,6 +47,10 @@ function refresh(map) {
             if ($(this).html().trim() == '<br>')
                 $(this).html("");
         });
+
+        {% for rev in all_reviews %}
+        $("#rate-container-{{forloop.counter}}").rating();
+        {% endfor %}
     });
 
     $.extend({
@@ -75,18 +80,45 @@ function refresh(map) {
             <div class="col-md-4">
                 <h4 id="title" {% if edit %} contenteditable="true" placeholder="Enter Title" {% endif %}>{{ plan.title }}</h4>
                 <div id="created-by"><i class="fa fa-user"></i>{{plan.created_by}}</div>
-                <div id="rating">Rating: {{plan.rating}}</div>
+
+                {% if agency %}
+                <div style="background-color:white; padding:5px;">
+                    <h5><strong>Sponsored by: {{agency.title}}</strong></h5>
+                    <div>{{agency.address}}</div>
+                    <div><a href="{{agency.website}}" style="text-transform:lowercase;">{{agency.website}}</a></div>
+                </div>
+                {% endif %}
+
+                <div id="rating">Rating: {{plan.rating|floatformat:2}}</div>
                 <div id="description" {% if edit %} contenteditable="true" placeholder="Enter Description" {% endif %}>{{ plan.description|safe }}</div>
                 <div id="trip-points-wrapper">
                     <div id="trip-points">
                     </div>
                 </div>
                 {% if edit %}
+                <div>
+                    <div class="radio">
+                        <label><input id="public-radio" type="radio" name="plan-public" {% if plan.public %}checked{% endif %} value="public"> Public</label>
+                    </div>
+                    <div class="radio">
+                        <label><input type="radio" name="plan-public" {% if not plan.public %}checked{% endif %} value="private"> Private</label>
+                    </div>
+                </div>
                 <div id="post-plan-wrapper">
                     <button id="post-plan" class="btn btn-primary"><i class="fa fa-save"></i>Save</button>
                 </div>
                 {% endif %}
 
+                <hr>
+
+                <div>
+                    Share this plan through this link:
+                    <a href="{{request.get_full_path}}" style="text-transform:lowercase;">{{request.get_full_path}}</a>
+                </div>
+
+                <hr>
+
+                {% if not edit %}
                 <div>
                     <h4 class="bottom-label">Rating</h4>
                     <div id="rate-container">
@@ -102,6 +134,22 @@ function refresh(map) {
                         <button id="post-review" class='btn btn-primary pull-right'>Post</button>
                     </div>
                 </div>
+                {% endif %}
+
+                {% for rev in all_reviews %}
+                <strong>{{rev.posted_by}}</strong>
+                <span>Rating: {{rev.rating|floatformat:2}}</span>
+
+                <div id="rate-container-{{forloop.counter}}">
+                    <input type="radio" name="rating-{{forloop.counter}}" class="rating-disabled" value="1" {% if rev.rating == 1 %} checked {% endif %}/>
+                    <input type="radio" name="rating-{{forloop.counter}}" class="rating-disabled" value="2" {% if rev.rating == 2 %} checked {% endif %}/>
+                    <input type="radio" name="rating-{{forloop.counter}}" class="rating-disabled" value="3" {% if rev.rating == 3 %} checked {% endif %}/>
+                    <input type="radio" name="rating-{{forloop.counter}}" class="rating-disabled" value="4" {% if rev.rating == 4 %} checked {% endif %}/>
+                    <input type="radio" name="rating-{{forloop.counter}}" class="rating-disabled" value="5" {% if rev.rating == 5 %} checked {% endif %}/>
+                </div>
+
+                <p>{{rev.text|safe}}</p>
+                {% endfor %}
 
             </div>
             <div class="col-md-8">
@@ -117,30 +165,3 @@ function refresh(map) {
     </div>
 </div>
 {% endblock %}
-
-
-
-
-
-</head>
-
-<body>
-    <div class="container">
-        <h1>Plan</h1>
-        <div class="row">
-            <div class="col-md-4">
-
-            </div>
-            <div class="col-md-8">
-
-            </div>
-        </div>
-
-    </div>
-
-    <script>
-
-
-    </script>
-</body>
-</html>

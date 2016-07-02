@@ -69,6 +69,7 @@ function initMap() {
         data = {"points": JSON.stringify(points),
             "title": $("#title").html(),
             "description": $("#description").html(),
+            "public": $("#public-radio").prop("checked")
         };
         $.redirectPost(
             postUrl,

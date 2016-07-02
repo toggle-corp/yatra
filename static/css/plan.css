@@ -27,6 +27,7 @@ h4 {
 
 [contenteditable=true]:empty:not(:focus):before{
     content:attr(placeholder);
+    color: #bababa;
 }
 [contenteditable=true]:focus{
     box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
