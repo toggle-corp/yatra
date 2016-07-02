@@ -161,7 +161,7 @@ class PlanView(View):
             if to_delete:
                 delete_point(to_delete)
 
-            for point in points:
+            for point in points[1:]:
                 tp = TripPoint()
                 tp.latitude = point[0]
                 tp.longitude = point[1]

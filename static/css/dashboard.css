@@ -1,0 +1,47 @@
+h4 {
+    text-transform: uppercase;
+    margin-bottom: 24px;
+}
+h1{
+    color: #27ae60;
+}
+
+#yatra-logo{
+    width: 200px;
+}
+#yatra-logo+div{
+    font-size: 1.2em;
+    margin-left: 50px;
+    margin-top: -24px;
+}
+
+#header-section{
+    background-color: #f0f0f0;
+}
+#body-section{
+    padding-top: 24px;
+}
+
+#title-wrapper {
+    padding: 24px 0px;
+}
+#title-wrapper #greeting-msg {
+    margin-right: 24px;
+}
+
+#search-wrapper {
+    padding: 24px 0px;
+}
+#search-wrapper .form-group:last-child {
+    text-align: right;
+}
+
+.recommendation, .search-result{
+    padding: 24px;
+    background-color: #fff;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 3px 2px rgba(0, 0, 0, 0.1);
+}
+.recommendation .title, .search-result .title{
+    margin-bottom: 10px;
+}

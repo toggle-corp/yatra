@@ -1,7 +1,15 @@
 .header .error{
     color: #e74c3c;
 }
-
+#yatra-logo{
+    margin-top: 24px;
+    width: 200px;
+}
+#yatra-logo+div{
+    font-size: 1.2em;
+    margin-left: 50px;
+    margin-top: -24px;
+}
 #header-section {
     background-color: #27ae60;
     color: #fff;

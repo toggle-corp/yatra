@@ -25,10 +25,10 @@ class PlanFilter:
         self.plans = plans if plans else Plan.objects.all()
         self.pk_order = None
 
-    def min_budget(self, cost):
+    def min_cost(self, cost):
         self.plans = self.plans.filter(budget__gte=cost)
 
-    def max_budget(self, cost):
+    def max_cost(self, cost):
         self.plans = self.plans.filter(budget__lte=cost)
 
     def min_days(self, days):
