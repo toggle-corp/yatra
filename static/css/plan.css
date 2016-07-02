@@ -1,0 +1,63 @@
+body{
+    line-height: 1.5;
+}
+
+#yatra-logo{
+    width: 200px;
+}
+#yatra-logo+div{
+    font-size: 1.2em;
+    margin-left: 50px;
+    margin-top: -24px;
+    color: #969696;
+}
+#header-section{
+    background-color: #f0f0f0;
+    padding: 24px 0px;
+}
+#body-section{
+    padding-top: 32px;
+}
+
+h4 {
+    color: #717171;
+    text-transform: uppercase;
+    padding: 8px;
+}
+
+[contenteditable=true]:empty:not(:focus):before{
+    content:attr(placeholder);
+}
+[contenteditable=true]:focus{
+    box-shadow: 0 2px 5px 1px rgba(0, 0, 0, 0.2);
+}
+[contenteditable=true]:focus+div{
+    margin-top: -6px;
+}
+#rating, #description, #created-by, #rate-container, #post-review, #review{
+    padding: 8px;
+}
+#created-by{
+    margin-top: -10px;
+}
+#post-plan-wrapper{
+    padding: 8px;
+    margin-top: 10px;
+    margin-bottom: 24px;
+}
+
+#trip-points-wrapper{
+    padding: 8px;
+}
+.trip-point{
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.trip-point::before{
+    content: '';
+    padding-right: 8px;
+}
+.trip-point .description{
+    color: #969696;
+    margin-left: 16px;
+}

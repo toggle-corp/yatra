@@ -1,0 +1,12 @@
+{% load staticfiles %}
+
+<div id="title-wrapper">
+    <div class="row">
+        <div class="pull-right">
+            <span id="greeting-msg">Welcome {{ request.user.username }} !</span>
+            <a href="{% url 'logout' %}" >Logout</a>
+        </div>
+        <img id="yatra-logo" src="{% static 'img/logo-green.png' %}">
+        <div>your travel companion</div>
+    </div>
+</div>
