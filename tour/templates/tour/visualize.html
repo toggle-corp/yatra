@@ -6,9 +6,6 @@
 {% block headblock %}
 <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
 <link rel="stylesheet" type="text/css" href="{% static 'css/visualize.css' %}">
-<style>
-    #the-map { height: 500px; }
-</style>
 {% endblock %}
 
 {% block scriptblock %}
@@ -45,7 +42,7 @@ function onEachFeature(feature, layer) {
             var hue = Math.floor((max_destinations - val - 1)/max_destinations*180);  // go from green to red
             console.log(hue);
             layer.setStyle({
-                color: 'hsl(' + hue +  ', 50%, 50%)'
+                color: 'hsl(' + hue +  ', 80%, 50%)'
             })
             return;
         }
@@ -66,9 +63,13 @@ function drawChart() {
         data.addRow([categ, categories[categ]]);
 
     // Set chart options
-    var options = {'title':'',
-                   'width':400,
-                   'height':300};
+    var options = {
+        title:'',
+        width: '100%',
+        height: 500,
+        backgroundColor : '#f0f0f0',
+        pieHole: 0.4
+    };
 
     // Instantiate and draw our chart, passing in some options.
     var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
@@ -86,11 +87,17 @@ function drawChart() {
 </div>
 <div class="section" id="body-section">
     <div class="container">
-        Destinations:
-        <div id="the-map"></div>
+        <div class="row">
+            <div  class="col-md-5">
+                <h4>Categories</h4>
+                <div id="chart_div"></div>
+            </div>
+            <div class="col-md-7">
+                <h4>Destinations</h4>
+                <div id="the-map"></div>
+            </div>
+        </div>
 
-        Categories:
-        <div id="chart_div"></div>
 
         <form id="order-form">
             Destination order by:

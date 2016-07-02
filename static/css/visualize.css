@@ -21,3 +21,19 @@
 #title-wrapper #greeting-msg {
     margin-right: 24px;
 }
+
+#the-map path {
+    opacity: 1;
+    stroke: #414141;
+    stroke-width: 2px;
+    stroke-linejoin: round;
+}
+
+#chart_div{
+    background-color: #f0f0f0;
+}
+
+#the-map {
+    height: 500px;
+    background-color: #f0f0f0;
+}
