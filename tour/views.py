@@ -32,8 +32,6 @@ class HomeView(View):
         elif "register" in request.POST:
             error = None
 
-            first_name = request.POST.get("firstname")
-            last_name = request.POST.get("lastname")
             email = request.POST.get("email")
             username = request.POST.get("username")
             password = request.POST.get("password")
@@ -42,9 +40,7 @@ class HomeView(View):
                 error = "Username already exists."
             else:
                 user = User.objects.create_user(username, email=email,
-                                                password=password,
-                                                first_name=first_name,
-                                                last_name=last_name)
+                                                password=password)
 
             if error:
                 return render(request, 'tour/home.html',

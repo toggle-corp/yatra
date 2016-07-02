@@ -1,25 +1,79 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
 
-<h1>Home Page</h1>
+{% block titleblock %}Yatra | Your travel companion{% endblock %}
 
+{% block headblock %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+{% endblock %}
 
-<form method="post">
-    {% csrf_token %}
-    <h2>Login</h2>
-    {% if login_error %}{{ login_error }}{% endif %}
-    <div><label>Username:</label><input type="text" name="username" required></div>
-    <div><label>Password:</label><input type="password" name="password" required></div>
-    <button type="submit" name="login">Login</button>
-</form>
+{% block scriptblock %}
+<script type="text/javascript" src="{% static 'js/home.js' %}"></script>
+{% endblock %}
 
-
-<form method="post">
-    {% csrf_token %}
-    <h2>Register</h2>
-    {% if register_error %}{{ register_error }}{% endif %}
-    <div><label>First Name:</label><input type="text" name="firstname"></div>
-    <div><label>Last Name:</label><input type="text" name="lastname"></div>
-    <div><label>Email</label><input type="email" name="email"></div>
-    <div><label>Username:</label><input type="text" name="username" required></div>
-    <div><label>Password:</label><input type="password" name="password" required></div>
-    <button type="submit" name="register">Register</button>
-</form>
+{% block bodyblock %}
+<div class="section" id="header-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <h1>Yatra<br><small>your travel companion</small></h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div id="promo-text">
+                    Make your travel plan perfect
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div id="form-container">
+                    <form id="signin-form" method="post">
+                        {% csrf_token %}
+                        <div class="header">
+                            <h3>Sign in to get started</h3>
+                            <div class="error">{% if login_error %}{{ login_error }}{% endif %}</div>
+                        </div>
+                        <div class="content">
+                            <div class="form-group">
+                                <input class="form-control" type="text" name="username" placeholder="Username" required>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="password" name="password" placeholder="Password" required>
+                            </div>
+                            <div class="form-group">
+                                <input class="btn btn-primary" type="submit" name="login">
+                            </div>
+                        </div>
+                        <div class="footer">Not registered yet? <a id="register-link" href="#">Register now</a></div>
+                    </form>
+                    <form id="register-form" method="post" hidden>
+                        {% csrf_token %}
+                        <div class="header">
+                            <h3>Register</h3>
+                            <div class="error">{% if register_error %}{{ register_error }}{% endif %}</div>
+                        </div>
+                        <div class="content">
+                            <div class="form-group">
+                                <input class="form-control" type="text" name="email" placeholder="E-mail" required>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="text" name="username" placeholder="Username" required>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="password" name="password" placeholder="Password" required>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" type="password" name="confirm-password" placeholder="Confirm Password" required>
+                            </div>
+                            <div class="form-group">
+                                <input class="btn btn-primary" type="submit" name="register">
+                            </div>
+                        </div>
+                        <div class="footer">Already have an account? <a id="signin-link" href="#">Signin</a></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

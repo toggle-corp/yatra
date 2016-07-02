@@ -1,0 +1,30 @@
+/*@font-face {
+    font-family: 'Cormorant Infant';
+    src: url('../fonts/CormorantInfant-Regular.ttf');
+    font-weight: 400;
+}
+@font-face {
+    font-family: 'Cormorant Infant';
+    src: url('../fonts/CormorantInfant-Medium.ttf');
+    font-weight: 500;
+}
+@font-face {
+    font-family: 'Cormorant Infant';
+    src: url('../fonts/CormorantInfant-Light.ttf');
+    font-weight: 300;
+}*/
+
+@font-face {
+    font-family: 'Didact Gothic';
+    src: url('../fonts/DidactGothic.ttf');
+}
+
+body{
+    /*font-family: 'Cormorant Infant', sans-serif;*/
+    font-family: 'Didact Gothic', sans-serif;
+}
+
+input[type="submit"], button, a{
+    text-transform: uppercase;
+    font-weight: 500;
+}
