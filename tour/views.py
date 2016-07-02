@@ -65,21 +65,29 @@ class DashboardView(View):
     @method_decorator(login_required)
     def get(self, request):
         user = request.user
-        plans = Plan.objects.all().exclude(review__posted_by__pk=user.pk)
+        plans = Plan.objects.filter(public=True). \
+            exclude(review__posted_by__pk=user.pk)
         recommendations = sort_by_recommended(plans, user)[:8]
         for plan in recommendations:
             plan.rating = Review.get_average_rating(plan)
         return render(request, 'tour/dashboard.html', {
             'recommendations': recommendations,
-            'destinations': Destination.objects.all(),
+            'destinations': [
+                d for d in Destination.objects.all()
+                if not District.objects.filter(name=d.name).exists()
+            ],
+            "districts": District.objects.all(),
             "categories": Category.objects.all(),
+            "my_plans":
+                Plan.objects.filter(created_by=request.user).
+                order_by('-created_at')
         })
 
     @method_decorator(login_required)
     def post(self, request):
         plan = Plan()
-        plan.destination = Destination.objects.get(
-            pk=request.POST["destination"]
+        plan.destination = Destination.get_or_create(
+            request.POST["destination"], request.POST["district"]
         )
         plan.category = Category.objects.get(
             pk=request.POST["category"]
@@ -87,13 +95,14 @@ class DashboardView(View):
         plan.title = request.POST["title"]
         plan.created_by = request.user
         plan.save()
-        return reditect('plan', plan.pk)
+        return redirect('plan', plan.pk)
 
 
 class SearchView(View):
     @method_decorator(login_required)
     def get(self, request):
-        plan_filter = PlanFilter()
+        plan_filter = PlanFilter(Plan.objects.filter(public=True).
+                                 exclude(review__posted_by__pk=user.pk))
 
         categ = request.GET.get("category")
         dest = request.GET.get("destination")
@@ -105,8 +114,13 @@ class SearchView(View):
         data = {}
 
         if dest != "":
-            plan_filter.destination(Destination.objects.get(pk=dest))
-            data["dest"] = dest
+            dests = dest.split(':')
+            if dests[0] == "dest":
+                plan_filter.destination(Destination.objects.get(pk=dests[1]))
+                data["dest"] = dests[1]
+            else:
+                plan_filter.district(District.objects.get(pk=dests[1]))
+                data["dist"] = dests[1]
         if categ != "":
             plan_filter.category(Category.objects.get(pk=categ))
             data["categ"] = categ
@@ -128,7 +142,11 @@ class SearchView(View):
             plan.rating = Review.get_average_rating(plan)
 
         data.update({
-            "destinations": Destination.objects.all(),
+            'destinations': [
+                d for d in Destination.objects.all()
+                if not District.objects.filter(name=d.name).exists()
+            ],
+            "districts": District.objects.all(),
             "categories": Category.objects.all(),
             "plans": plans,
         })
@@ -157,12 +175,19 @@ class PlanView(View):
             review = Review.objects.get(plan=plan, posted_by=request.user)
         except:
             review = None
+
+        try:
+            agency = Agency.objects.get(user=plan.created_by)
+        except:
+            agency = None
+
         return render(request, 'tour/plan.html', {
             'plan': plan,
             'edit': plan.created_by == request.user,
             'points': points,
             'review': review,
-            'all_reviews': Review.objects.all(),
+            'agency': agency,
+            'all_reviews': Review.objects.all().order_by('-posted_at'),
         })
 
     @method_decorator(login_required)
@@ -198,6 +223,9 @@ class PlanView(View):
 
         if "title" in request.POST:
             plan.title = request.POST["title"]
+
+        if "public" in request.POST:
+            plan.public = request.POST["public"] == "true"
 
         if "description" in request.POST:
             plan.description = request.POST["description"]

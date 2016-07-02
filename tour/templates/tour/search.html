@@ -46,8 +46,11 @@
                         <div class="col-sm-6">
                             <select name="destination" id="destination-select" placeholder="Select a destination">
                                 <option value="" selected>Select a destination</option>
-                                {% for destination in destinations %}
-                                <option value="{{destination.pk}}" {% if dest and dest == destination.pk %}selected{% endif %}>{{destination.name}}</option>
+                                {% for desti in destinations %}
+                                <option value="dest:{{desti.pk}}" {% if dest and dest == desti.pk %}selected{% endif %}>{{desti.name}}, {{desti.district.name}}</option>
+                                {% endfor %}
+                                {% for disti in districts %}
+                                <option value="dist:{{disti.pk}}" {% if dist and dist == disti.pk %}selected{% endif %}>{{disti.name}}</option>
                                 {% endfor %}
                             </select>
                         </div>
@@ -73,6 +76,7 @@
                     <input class="btn btn-primary" type="submit" value="search">
                 </div>
             </form>
+
         </div>
     </div>
 </div>

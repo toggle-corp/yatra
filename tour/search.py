@@ -45,6 +45,9 @@ class PlanFilter:
             destination__district=destination.district
         )
 
+    def district(self, district):
+        self.plans = self.plans.filter(destination__district=district)
+
     def category(self, category):
         self.plans = self.plans.filter(category=category)
 
