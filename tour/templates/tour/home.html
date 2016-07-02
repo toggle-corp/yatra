@@ -5,6 +5,16 @@
 
 {% block headblock %}
 <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+<style>
+#header-section {
+    background-image: url("{% static 'img/background.jpg' %}");
+    background-position: center center;
+    background-size: cover;
+    background-color: #a0a0a0;
+    background-blend-mode: multiply;
+    background-attachment: fixed;
+}
+</style>
 {% endblock %}
 
 {% block scriptblock %}
@@ -71,7 +81,7 @@
                                 <input class="btn btn-primary" type="submit" name="register">
                             </div>
                         </div>
-                        <div class="footer">Already have an account? <a id="signin-link" href="#">Signin</a></div>
+                        <div class="footer">Already have an account? <a id="signin-link" href="#">Sign in</a></div>
                     </form>
                 </div>
             </div>
