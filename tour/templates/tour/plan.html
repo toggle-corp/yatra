@@ -5,8 +5,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/rating.css' %}">
     <script src="{% static 'js/jquery.min.js' %}"></script>
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/rating.js' %}"></script>
     <style>
         [contenteditable=true]:empty:not(:focus):before{
             content:attr(placeholder);.
@@ -57,7 +59,7 @@
                 Share with ...
 
                 <div>
-                    Created By:
+                    Created By: {{plan.created_by}}
 
                 </div>
             </div>
@@ -71,25 +73,53 @@
                 </div>
             </div>
         </div>
+        <div>
+            Rating
+            <div id="rate-container">
+                <input type="radio" name="rating" class="rating" value="1" {% if review and review.rating == 1 %} checked {% endif %}/>
+                <input type="radio" name="rating" class="rating" value="2" {% if review and review.rating == 2 %} checked {% endif %}/>
+                <input type="radio" name="rating" class="rating" value="3" {% if review and review.rating == 3 %} checked {% endif %}/>
+                <input type="radio" name="rating" class="rating" value="4" {% if review and review.rating == 4 %} checked {% endif %}/>
+                <input type="radio" name="rating" class="rating" value="5" {% if review and review.rating == 5 %} checked {% endif %}/>
+            </div>
+            Review
+            <textarea id="review">{% if review %}{{review}}{% endif %}</textarea>
+            <button id="post-review">Post</button>
+        </div>
     </div>
 
     <script>
+        $("#rate-container").rating(function(vote, event) {
+            data = {'vote': vote};
+            $.redirectPost(
+                postUrl,
+                data
+            );
+        });
+        $("#post-review").on('click', function() {
+            data = {'review': $("#review").html()};
+            $.redirectPost(
+                postUrl,
+                data
+            );
+        });
         $('[contenteditable]').keydown(function(e) {
             if ($(this).html().trim() == '<br>')
                 $(this).html("");
         });
 
-    $.extend(
-    {
-        redirectPost: function(location, args)
+        $.extend(
         {
-            var form = "{% csrf_token %}";
-            $.each( args, function( key, value ) {
-                form += '<textarea type="hidden" name="'+key+'">' + value + '</textarea>';
-            });
-            $('<form action="'+location+'" method="POST">'+form+'</form>').appendTo('body').submit();
-        }
-    });
+            redirectPost: function(location, args)
+            {
+                var form = "{% csrf_token %}";
+                $.each( args, function( key, value ) {
+                    form += '<textarea type="hidden" name="'+key+'">' + value + '</textarea>';
+                });
+                $('<form action="'+location+'" method="POST">'+form+'</form>').appendTo('body').submit();
+            }
+        });
+
     </script>
 </body>
 </html>

@@ -107,8 +107,7 @@ class Review(models.Model):
         unique_together = ('plan', 'posted_by',)
 
     def __str__(self):
-        return self.plan.title + " by " + self.posted_by.username + \
-            " Rating: " + str(self.rating)
+        return self.plan.title
 
     @staticmethod
     def get_average_rating(plan):

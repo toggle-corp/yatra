@@ -129,15 +129,44 @@ class PlanView(View):
         while point.next_point:
             point = point.next_point
             points.append(point)
+
+        try:
+            review = Review.objects.get(plan=plan, posted_by=request.user)
+        except:
+            review = None
         return render(request, 'tour/plan.html', {
             'plan': plan,
             'edit': plan.created_by == request.user,
             'points': points,
+            'review': review,
         })
 
     @method_decorator(login_required)
     def post(self, request, pk):
         plan = Plan.objects.get(pk=pk)
+
+        if "vote" in request.POST:
+            try:
+                review = Review.objects.get(plan=plan, posted_by=request.user)
+                review.rating = request.POST["vote"]
+                review.save()
+            except:
+                review = Review(plan=plan, rating=request.POST["vote"],
+                                posted_by=request.user)
+                review.save()
+            return redirect('plan', pk)
+
+        if "review" in request.POST:
+            try:
+                review = Review.objects.get(plan=plan, posted_by=request.user)
+                review.review = request.POST["review"]
+                review.save()
+            except:
+                review = Review(plan=plan, rating=1, review=request.POST["review"],
+                                posted_by=request.user)
+                review.save()
+            return redirect('plan', pk)
+
         if "title" in request.POST:
             plan.title = request.POST["title"]
 

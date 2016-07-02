@@ -68,7 +68,7 @@ function initMap() {
     $("#post-plan").on('click', function(){
         data = {"points": JSON.stringify(points),
             "title": $("#title").html(),
-            "description": $("#description").html()
+            "description": $("#description").html(),
         };
         $.redirectPost(
             postUrl,
@@ -177,8 +177,8 @@ function reverseGeocode(geocoder, input, callback) {
         }
         else if (status === google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {
             setTimeout(function() {
-                reverseGeocode(geocoder, input, callback);
-            }, 200);
+                reverseGeocode(geocder, input, callback);
+            }, 50);
         }
         else {
             // window.alert('Geocoder failed due to: ' + status);
