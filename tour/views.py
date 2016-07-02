@@ -102,14 +102,14 @@ class SearchView(View):
     @method_decorator(login_required)
     def get(self, request):
         plan_filter = PlanFilter(Plan.objects.filter(public=True).
-                                 exclude(review__posted_by__pk=user.pk))
+                                 exclude(review__posted_by=request.user))
 
-        categ = request.GET.get("category")
-        dest = request.GET.get("destination")
-        min_cost = request.GET.get("min_cost")
-        max_cost = request.GET.get("max_cost")
-        min_days = request.GET.get("min_days")
-        max_days = request.GET.get("max_days")
+        categ = request.GET.get("category", "")
+        dest = request.GET.get("destination", "")
+        min_cost = request.GET.get("min_cost", "")
+        max_cost = request.GET.get("max_cost", "")
+        min_days = request.GET.get("min_days", "")
+        max_days = request.GET.get("max_days", "")
 
         data = {}
 
