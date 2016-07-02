@@ -23,7 +23,7 @@ function refresh(map) {
 {% endblock %}
 
 {% block scriptblock %}
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBg2Ixviw77H-z11vbBXn2SqBSbM3CAjS0&callback=initMap"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA-nr38mjHS3Y_PapPYSmTaFFQ9ucQGwig&libraries=places&callback=initMap"></script>
 <script src="{% static 'js/rating.js' %}"></script>
 <script>
 
@@ -87,7 +87,7 @@ function refresh(map) {
                 </div>
                 {% endif %}
 
-                <div>
+                <div style="padding:8px;">
                     <h4 class="bottom-label">Rating</h4>
                     <div id="rate-container">
                         <input type="radio" name="rating" class="rating" value="1" {% if review and review.rating == 1 %} checked {% endif %}/>
@@ -97,50 +97,26 @@ function refresh(map) {
                         <input type="radio" name="rating" class="rating" value="5" {% if review and review.rating == 5 %} checked {% endif %}/>
                     </div>
                     <h4>Review</h4>
-                    <textarea id="review" style="width: 100%">{% if review %}{{review.text}}{% endif %}</textarea>
+                    <textarea id="review" style="width: 100%" rows="5">{% if review %}{{review.text}}{% endif %}</textarea>
                     <div>
-                        <button id="post-review" class='btn btn-primary pull-right'>Post</button>
+                        <button id="post-review" class='btn btn-primary pull-right' style="margin-top: 16px;">Post</button>
                     </div>
                 </div>
 
             </div>
             <div class="col-md-8">
-                <div id="floating-panel">
+                <!-- <div id="floating-panel">
                     <input id="address" type="textbox" value="">
                     <input id="submit" type="button" value="Find in map">
-                </div>
+                </div> -->
                 <div class="row">
-                    <div id="map" class="col-md-12" oncontextmenu="return false;"></div>
+                    <div class="col-md-12">
+                        <input id="pac-input" class="controls" type="text" placeholder="Search Box">
+                        <div id="map" oncontextmenu="return false;"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 {% endblock %}
-
-
-
-
-
-</head>
-
-<body>
-    <div class="container">
-        <h1>Plan</h1>
-        <div class="row">
-            <div class="col-md-4">
-
-            </div>
-            <div class="col-md-8">
-
-            </div>
-        </div>
-
-    </div>
-
-    <script>
-
-
-    </script>
-</body>
-</html>
