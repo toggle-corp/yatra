@@ -8,6 +8,10 @@
     color: #969696;
 }
 
+h4{
+    text-transform: uppercase;
+}
+
 #header-section{
     background-color: #f0f0f0;
 }
@@ -30,10 +34,12 @@
 }
 
 #chart_div{
-    background-color: #f0f0f0;
+    box-shadow: 0 2px 5px 2px rgba(0, 0, 0, 0.1);
+
 }
 
 #the-map {
     height: 500px;
     background-color: #f0f0f0;
+    box-shadow: 0 2px 5px 2px rgba(0, 0, 0, 0.1);
 }

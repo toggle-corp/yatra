@@ -32,3 +32,11 @@ input[type="submit"], button, a{
 .fa {
     margin-right: 10px;
 }
+
+#footer-section{
+    background-color: #414141;
+    color: #fff;
+    padding: 50px;
+    text-align: center;
+    margin-top: 24px;
+}
