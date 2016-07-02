@@ -7,6 +7,8 @@ from django.views.generic import View, TemplateView
 from tour.models import *
 from tour.search import *
 
+import json
+
 
 class HomeView(View):
     def get(self, request):
@@ -110,15 +112,66 @@ class SearchView(View):
         })
 
 
+def delete_point(point):
+    if point.next_point:
+        delete_point(point.next_point)
+    point.delete()
+
+
 class PlanView(View):
     @method_decorator(login_required)
     def get(self, request, pk):
         plan = Plan.objects.get(pk=pk)
         plan.rating = Review.get_average_rating(plan)
+
+        points = [plan.starting_point]
+        point = plan.starting_point
+        while point.next_point:
+            point = point.next_point
+            points.append(point)
         return render(request, 'tour/plan.html', {
             'plan': plan,
             'edit': plan.created_by == request.user,
+            'points': points,
         })
+
+    @method_decorator(login_required)
+    def post(self, request, pk):
+        plan = Plan.objects.get(pk=pk)
+        if "title" in request.POST:
+            plan.title = request.POST["title"]
+
+        if "description" in request.POST:
+            plan.description = request.POST["description"]
+        plan.save()
+
+        if "points" in request.POST:
+            to_delete = plan.starting_point.next_point
+
+            points = json.loads(request.POST["points"])
+            if len(points) > 0:
+                plan.starting_point.latitude = points[0][0]
+                plan.starting_point.longitude = points[0][1]
+                plan.starting_point.day = points[0][2]
+                plan.starting_point.description = points[0][3]
+                plan.starting_point.next_point = None
+                plan.starting_point.save()
+            pt = plan.starting_point
+
+            if to_delete:
+                delete_point(to_delete)
+
+            for point in points:
+                tp = TripPoint()
+                tp.latitude = point[0]
+                tp.longitude = point[1]
+                tp.day = point[2]
+                tp.description = point[3]
+                tp.save()
+                pt.next_point = tp
+                pt.save()
+                pt = tp
+        return redirect('plan', pk)
 
 
 class VisualizeView(View):
