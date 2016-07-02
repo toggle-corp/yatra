@@ -41,6 +41,17 @@ L.geoJson(level6, {
 function onEachFeature(feature, layer) {
     if (feature.properties && feature.properties["name:en"]) {
         var name = feature.properties["name:en"];
+        layer.on('click', function(){
+            window.location.href = "{% url 'search' %}?destination=dist%3A"+name;
+        })
+        layer.bindPopup(name);
+        layer.on('mouseover', function (e) {
+            this.openPopup();
+        });
+        layer.on('mouseout', function (e) {
+            this.closePopup();
+        });
+
         if (name in destinations) {
             var val = destinations[name];
             var hue = Math.floor((max_destinations - val - 1)/max_destinations*180);  // go from green to red
