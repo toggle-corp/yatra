@@ -118,8 +118,10 @@ class PlanView(View):
     @method_decorator(login_required)
     def get(self, request, pk):
         plan = Plan.objects.get(pk=pk)
+        plan.rating = Review.get_average_rating(plan)
         return render(request, 'tour/plan.html', {
-            'plan': plan
+            'plan': plan,
+            'edit': plan.created_by == request.user,
         })
 
 

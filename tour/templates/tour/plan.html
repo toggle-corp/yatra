@@ -1,4 +1,58 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.minjs' %}"></script>
+    <style>
+        [contenteditable=true]:empty:not(:focus):before{
+            content:attr(placeholder);
+            color: #bababa;
+        }
+    </style>
+</head>
 
-<h1>Plan</h1>
+<body>
+    <div class="container">
+        <h1>Plan</h1>
+        <div class="row">
+            <div class="col-md-4">
+                <strong><div {% if edit %} contenteditable="true" placeholder="Enter Title" {% endif %}>{{ plan.title }}</div></strong>
+                <div>Rating: {{plan.rating}}</div>
+                <div {% if edit %} contenteditable="true" placeholder="Enter Description" {% endif %}>{{ plan.description }}</div>
 
-{{ plan.title }}
+                <hr>
+
+                <div>
+                    <ul>
+                        <li>Day 1: asdasd</li>
+                        <li>Day 2: asdasd</li>
+                        <li>Day 3: asdasd</li>
+                        <li>Day 4: asdasd</li>
+                    </ul>
+                </div>
+
+                <hr>
+
+                Share with ...
+
+                <div>
+                    Created By:
+
+                </div>
+            </div>
+            <div clas="col-md-8">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $('[contenteditable]').keydown(function(e) {
+            if ($(this).html().trim() == '<br>')
+                $(this).html("");
+        });
+    </script>
+</body>
+</html>
