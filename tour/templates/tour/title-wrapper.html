@@ -6,7 +6,7 @@
             <span id="greeting-msg">Welcome {{ request.user.username }} !</span>
             <a href="{% url 'logout' %}" >Logout</a>
         </div>
-        <img id="yatra-logo" src="{% static 'img/logo-green.png' %}">
-        <div>your travel companion</div>
+        <a href="{% url 'dashboard' %}"><img id="yatra-logo" src="{% static 'img/logo-green.png' %}"></a>
+        <div id="slogan">your travel companion</div>
     </div>
 </div>

@@ -5,7 +5,7 @@ body{
 #yatra-logo{
     width: 200px;
 }
-#yatra-logo+div{
+#slogan {
     font-size: 1.2em;
     margin-left: 50px;
     margin-top: -24px;
@@ -15,8 +15,11 @@ body{
     background-color: #f0f0f0;
     padding: 24px 0px;
 }
-#body-section{
-
+#title-wrapper {
+    padding: 24px 0px;
+}
+#title-wrapper #greeting-msg {
+    margin-right: 24px;
 }
 
 h4 {
