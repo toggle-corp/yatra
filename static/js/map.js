@@ -80,7 +80,7 @@ function initMap() {
 function updatePoints() {
     $("#trip-points").children().remove();
     for (var i=0; i<points.length; ++i) {
-        var element = $("<li>Day " + points[i][2] + ": " + points[i][4] + "<br>" + points[i][3]+"</li>");
+        var element = $("<div class='trip-point'>Day " + points[i][2] + ": " + points[i][4] + "<div class='description'>" + points[i][3]+"</div></div>");
         $("#trip-points").append(element);
         day = points[i][2];
     }

@@ -28,3 +28,7 @@ input[type="submit"], button, a{
     text-transform: uppercase;
     font-weight: 500;
 }
+
+.fa {
+    margin-right: 10px;
+}
