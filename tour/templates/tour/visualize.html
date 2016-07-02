@@ -44,13 +44,6 @@ function onEachFeature(feature, layer) {
         layer.on('click', function(){
             window.location.href = "{% url 'search' %}?destination=dist%3A"+name;
         })
-        layer.bindPopup(name);
-        layer.on('mouseover', function (e) {
-            this.openPopup();
-        });
-        layer.on('mouseout', function (e) {
-            this.closePopup();
-        });
 
         if (name in destinations) {
             var val = destinations[name];

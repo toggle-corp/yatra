@@ -67,7 +67,7 @@ class DashboardView(View):
         user = request.user
         plans = Plan.objects.filter(public=True). \
             exclude(review__posted_by__pk=user.pk)
-        recommendations = sort_by_recommended(plans, user)[:8]
+        recommendations = sort_by_recommended(plans, user)[:6]
         for plan in recommendations:
             plan.rating = Review.get_average_rating(plan)
         return render(request, 'tour/dashboard.html', {

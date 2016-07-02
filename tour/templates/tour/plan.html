@@ -88,7 +88,7 @@ function refresh(map) {
                 </div>
                 {% endif %}
 
-                <div id="rating">Rating: {{plan.rating|floatformat:2}}</div>
+                <!-- <div id="rating">Rating: {{plan.rating|floatformat:2}}</div> -->
                 <div id="description" {% if edit %} contenteditable="true" placeholder="Enter Description" {% endif %}>{{ plan.description|safe }}</div>
                 <div id="trip-points-wrapper">
                     <div id="trip-points">
@@ -137,7 +137,7 @@ function refresh(map) {
 
                 {% for rev in all_reviews %}
                 <strong>{{rev.posted_by}}</strong>
-                <span>Rating: {{rev.rating|floatformat:2}}</span>
+                <!-- <span>Rating: {{rev.rating|floatformat:2}}</span> -->
 
                 <div id="rate-container-{{forloop.counter}}">
                     <input type="radio" name="rating-{{forloop.counter}}" class="rating-disabled" value="1" {% if rev.rating == 1 %} checked {% endif %}/>

@@ -85,10 +85,10 @@
     <div class="container">
         <div class="row">
             <div class="col-md-7">
-                <div class="block" id="my-plans-block">
-                    <h4>My Plans</h4>
+                <div class="block" id="recommendations-block">
+                    <h4>Recommendations</h4>
                     <div class="row">
-                        {% for plan in my_plans %}
+                        {% for plan in recommendations %}
                         <div class=col-sm-6>
                             <div class="recommendation">
                                 <div class="title"><a href="{% url 'plan' plan.pk %}">{{plan.title}}</a></div>
@@ -136,10 +136,10 @@
             </div>
         </div>
 
-        <div class="block" id="recommendations-block">
-            <h4>Recommendations</h4>
+        <div class="block" id="my-plans-block">
+            <h4>My Plans</h4>
             <div class="row">
-                {% for plan in recommendations %}
+                {% for plan in my_plans %}
                 <div class=col-sm-3>
                     <div class="recommendation">
                         <div class="title"><a href="{% url 'plan' plan.pk %}">{{plan.title}}</a></div>
