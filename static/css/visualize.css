@@ -1,0 +1,23 @@
+#yatra-logo{
+    width: 200px;
+}
+#yatra-logo+div{
+    font-size: 1.2em;
+    margin-left: 50px;
+    margin-top: -24px;
+    color: #969696;
+}
+
+#header-section{
+    background-color: #f0f0f0;
+}
+#body-section{
+    padding-top: 24px;
+}
+
+#title-wrapper {
+    padding: 24px 0px;
+}
+#title-wrapper #greeting-msg {
+    margin-right: 24px;
+}

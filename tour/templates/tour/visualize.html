@@ -1,20 +1,91 @@
+{% extends 'base.html' %}
 {% load staticfiles %}
 
-<head>
+{% block titleblock %}Yatra | Overview{% endblock %}
 
-    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
-    <script src="{% static 'js/jquery.min.js' %}"></script>
-    <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
-    <style>
-        #the-map { height: 500px; }
-    </style>
+{% block headblock %}
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/visualize.css' %}">
+<style>
+    #the-map { height: 500px; }
+</style>
+{% endblock %}
 
-    <script src="{% static 'gis/nepal/admin_level_6.geojson' %}"></script>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-</head>
+{% block scriptblock %}
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+<script src="{% static 'gis/nepal/admin_level_6.geojson' %}"></script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script>
+var destinations = {
+    {% for dest in destinations %}
+        "{{dest.district}}": {{forloop.counter0}},
+    {% endfor %}
+};
 
-<body>
-    <div>
+var max_destinations = {{destinations|length}};
+
+var categories = {
+    {% for categ in categories %}
+        "{{categ.name}}": {{forloop.counter}},
+    {% endfor %}
+}
+
+var map = L.map('the-map').setView([27.7, 85.3], 6);
+
+L.geoJson(level6, {
+    onEachFeature: onEachFeature
+}).addTo(map);
+
+function onEachFeature(feature, layer) {
+    if (feature.properties && feature.properties["name:en"]) {
+        var name = feature.properties["name:en"];
+        if (name in destinations) {
+            var val = destinations[name];
+            var hue = Math.floor((max_destinations - val - 1)/max_destinations*180);  // go from green to red
+            console.log(hue);
+            layer.setStyle({
+                color: 'hsl(' + hue +  ', 50%, 50%)'
+            })
+            return;
+        }
+    }
+    layer.setStyle({
+        color: 'gray'
+    });
+}
+
+google.charts.load('current', {'packages':['corechart']});
+google.charts.setOnLoadCallback(drawChart);
+function drawChart() {
+    // Create the data table.
+    var data = new google.visualization.DataTable();
+    data.addColumn('string', 'Categories');
+    data.addColumn('number', '');
+    for (categ in categories)
+        data.addRow([categ, categories[categ]]);
+
+    // Set chart options
+    var options = {'title':'',
+                   'width':400,
+                   'height':300};
+
+    // Instantiate and draw our chart, passing in some options.
+    var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+    chart.draw(data, options);
+}
+</script>
+
+{% endblock %}
+
+{% block bodyblock %}
+<div class="section" id="header-section">
+    <div class="container">
+        {% include 'tour/title-wrapper.html' %}
+    </div>
+</div>
+<div class="section" id="body-section">
+    <div class="container">
         Destinations:
         <div id="the-map"></div>
 
@@ -34,65 +105,5 @@
             </select>
         </form>
     </div>
-
-    <script>
-        var destinations = {
-            {% for dest in destinations %}
-                "{{dest.district}}": {{forloop.counter0}},
-            {% endfor %}
-        };
-        var max_destinations = {{destinations|length}};
-
-        var categories = {
-            {% for categ in categories %}
-                "{{categ.name}}": {{forloop.counter}},
-            {% endfor %}
-        }
-
-
-        var map = L.map('the-map').setView([27.7, 85.3], 6);
-        L.geoJson(level6, {
-                onEachFeature: onEachFeature
-            }).addTo(map);
-
-
-        function onEachFeature(feature, layer) {
-            if (feature.properties && feature.properties["name:en"]) {
-                var name = feature.properties["name:en"];
-                if (name in destinations) {
-                    var val = destinations[name];
-                    var hue = Math.floor((max_destinations - val - 1)/max_destinations*180);  // go from green to red
-                    console.log(hue);
-                    layer.setStyle({
-                        color: 'hsl(' + hue +  ', 50%, 50%)'
-                    })
-                    return;
-                }
-            }
-            layer.setStyle({
-                color: 'gray'
-            });
-        }
-
-
-        google.charts.load('current', {'packages':['corechart']});
-        google.charts.setOnLoadCallback(drawChart);
-        function drawChart() {
-            // Create the data table.
-            var data = new google.visualization.DataTable();
-            data.addColumn('string', 'Categories');
-            data.addColumn('number', '');
-            for (categ in categories)
-                data.addRow([categ, categories[categ]]);
-
-            // Set chart options
-            var options = {'title':'',
-                           'width':400,
-                           'height':300};
-
-            // Instantiate and draw our chart, passing in some options.
-            var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-            chart.draw(data, options);
-        }
-    </script>
-</body>
+</div>
+{% endblock %}
