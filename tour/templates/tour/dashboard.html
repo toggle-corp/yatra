@@ -1,47 +1,105 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
 
-<h1>Dashboard</h1>
+{% block titleblock %}Yatra | Dashboard{% endblock %}
 
-<div><a href="{% url 'logout' %}">Logout</a></div>
+{% block headblock %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/dashboard.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/selectize.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/selectize.bootstrap3.css' %}">
+{% endblock %}
 
-<div><a href="{% url 'visualize' %}">View Popular Destinations on Map</a></div>
+{% block scriptblock %}
+<script type="text/javascript" src="{% static 'js/dashboard.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/selectize.js' %}"></script>
+{% endblock %}
 
-<div>
-    <h2> Search </h2>
-    <form action="{% url 'search' %}">
-        <div>
-            <label>Category: </label>
-            <select name="category">
-                <option value="" selected>--none--</option>
-                {% for category in categories %}
-                <option value="{{category.pk}}">{{category.name}}</option>
-                {% endfor %}
-            </select>
+{% block bodyblock %}
+<div class="section" id="header-section">
+    <div class="container">
+        <div id="title-wrapper">
+            <div class="row">
+                <div class="col-sm-6">
+                    <div id="greeting-msg">Welcome {{ request.user.username }}!</div>
+                </div>
+                <div class="col-sm-2 col-sm-offset-4">
+                    <a href="{% url 'logout' %}" class="pull-right">Logout</a>
+                </div>
+            </div>
         </div>
-        <div>
-            <label>Destination: </label>
-            <select name="destination">
-                <option value="" selected>--none--</option>
-                {% for dest in destinations %}
-                <option value="{{dest.pk}}">{{dest.name}}</option>
-                {% endfor %}
-            </select>
+        <div id="search-wrapper">
+            <form action="{% url 'search' %}">
+                <div class="form-group">
+                    <h4>Search for travel plan</h4>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <select id="category-select" name="category" placeholder="Select a category">
+                                <option value="" selected>Select a category</option>
+                                {% for category in categories %}
+                                <option value="{{category.pk}}">{{category.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-sm-6">
+                            <select name="destination" id="destination-select" placeholder="Select a destination">
+                                <option value="" selected>Select a destination</option>
+                                {% for dest in destinations %}
+                                <option value="{{dest.pk}}">{{dest.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <input type="number" name="min_cost" class="form-control" placeholder="Min cost (Rs.)">
+                        </div>
+                        <div class="col-sm-3">
+                            <input type="number" name="max_cost" class="form-control" placeholder="Max cost (Rs.)">
+                        </div>
+                        <div class="col-sm-3">
+                            <input type="number" name="min_days" class="form-control" placeholder="Min days">
+                        </div>
+                        <div class="col-sm-3">
+                            <input type="number" name="max_days" class="form-control" placeholder="Max days">
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input class="btn btn-primary" type="submit" value="search">
+                </div>
+            </form>
         </div>
-        <div><label>Min Budget (Rs.): </label><input type="number" name="min_cost"></div>
-        <div><label>Max Budget (Rs.): </label><input type="number" name="max_cost"></div>
-        <div><label>Min Days: </label><input type="number" name="min_days"></div>
-        <div><label>Max Days: </label><input type="number" name="max_days"></div>
-        <button type="submit">Search</button>
-    </form>
+    </div>
 </div>
 
-<div>
-    <h2>Recommendations</h2>
-{% for plan in recommendations %}
-    <h4> <a href="{% url 'plan' plan.pk %}">{{plan.title}}</a> </h4>
-    <h6> {{plan.category}} </h6>
-    Rating: {{plan.rating|floatformat:2}}
-    <p> {{plan.description}} </p>
-    <p> Approx. budget: Rs. {{plan.budget}}</p>
-    <p> {{plan.number_of_days}} days </p>
-{% endfor %}
+<div class="section" id="body-section">
+    <div class="container">
+        <div class="block" id="recommendations-block">
+            <h4>Recommendations</h4>
+            <div class="row">
+                {% for plan in recommendations %}
+                <div class=col-sm-3>
+                    <div class="recommendation">
+                        <div class="title"><a href="{% url 'plan' plan.pk %}">{{plan.title}}</a></div>
+                        <div class="category">{{plan.category}}</div>
+                        <div class="rating">Rating: {{plan.rating|floatformat:2}}</div>
+                        <div class="description"> {{plan.description}} </div>
+                        <div class="budget"> Approx. budget: Rs. {{plan.budget}}</div>
+                        <div class="days">{{plan.number_of_days}} days</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
 </div>
+
+<!-- <div><a href="{% url 'visualize' %}">View Popular Destinations on Map</a></div> -->
+
+
+{% endblock %}
