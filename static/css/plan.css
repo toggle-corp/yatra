@@ -104,3 +104,14 @@ h4 {
 
 .pac-container {
 }
+
+.review{
+    padding: 16px 0px;
+    min-height: 150px;
+}
+.review h5{
+}
+
+#review-block{
+    padding-top: 50px;
+}

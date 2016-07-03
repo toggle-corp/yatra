@@ -95,7 +95,7 @@ function refresh(map) {
                     </div>
                 </div>
                 {% if edit %}
-                <div>
+                <div style="padding: 8px;">
                     <div class="radio">
                         <label><input id="public-radio" type="radio" name="plan-public" {% if plan.public %}checked{% endif %} value="public"> Public</label>
                     </div>
@@ -134,22 +134,6 @@ function refresh(map) {
                     </div>
                 </div>
                 {% endif %}
-
-                {% for rev in all_reviews %}
-                <strong>{{rev.posted_by}}</strong>
-                <!-- <span>Rating: {{rev.rating|floatformat:2}}</span> -->
-
-                <div id="rate-container-{{forloop.counter}}">
-                    <input type="radio" name="rating-{{forloop.counter}}" class="rating-disabled" value="1" {% if rev.rating == 1 %} checked {% endif %}/>
-                    <input type="radio" name="rating-{{forloop.counter}}" class="rating-disabled" value="2" {% if rev.rating == 2 %} checked {% endif %}/>
-                    <input type="radio" name="rating-{{forloop.counter}}" class="rating-disabled" value="3" {% if rev.rating == 3 %} checked {% endif %}/>
-                    <input type="radio" name="rating-{{forloop.counter}}" class="rating-disabled" value="4" {% if rev.rating == 4 %} checked {% endif %}/>
-                    <input type="radio" name="rating-{{forloop.counter}}" class="rating-disabled" value="5" {% if rev.rating == 5 %} checked {% endif %}/>
-                </div>
-
-                <p>{{rev.text|safe}}</p>
-                {% endfor %}
-
             </div>
             <div class="col-md-8">
                 <!-- <div id="floating-panel">
@@ -162,6 +146,28 @@ function refresh(map) {
                         <div id="map" oncontextmenu="return false;"></div>
                     </div>
                 </div>
+
+            </div>
+        </div>
+        <div id="review-block">
+            <h4>Reviews</h4>
+            <div class="row">
+                {% for rev in all_reviews %}
+                <div class="col-md-3">
+                    <div class="review">
+                        <h5>{{rev.posted_by}}</h5>
+                        <!-- <span>Rating: {{rev.rating|floatformat:2}}</span> -->
+                        <div id="rate-container-{{forloop.counter}}">
+                            <input type="radio" name="rating-{{forloop.counter}}" class="rating-disabled" value="1" {% if rev.rating == 1 %} checked {% endif %}/>
+                            <input type="radio" name="rating-{{forloop.counter}}" class="rating-disabled" value="2" {% if rev.rating == 2 %} checked {% endif %}/>
+                            <input type="radio" name="rating-{{forloop.counter}}" class="rating-disabled" value="3" {% if rev.rating == 3 %} checked {% endif %}/>
+                            <input type="radio" name="rating-{{forloop.counter}}" class="rating-disabled" value="4" {% if rev.rating == 4 %} checked {% endif %}/>
+                            <input type="radio" name="rating-{{forloop.counter}}" class="rating-disabled" value="5" {% if rev.rating == 5 %} checked {% endif %}/>
+                        </div>
+                        <div class="review-text">{{rev.text|safe}}</div>
+                    </div>
+                </div>
+                {% endfor %}
             </div>
         </div>
     </div>
